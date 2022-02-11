@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>data list</title>
+</head>
+
+<body>
+    <h2>게시글 리스트</h2>
+    <table border='1'>
+        <colgroup>
+            <col width='60'>
+            <col width='200'>
+            <col width='100'>
+        </colgroup>
+        <thead>
+            <tr>
+                <th>글번호</th>
+                <th>글제목</th>
+                <th>작성자</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for(i = 0; i < list.length; i++) { %>
+                <tr>
+                    <td>
+                        <%=list[i].ingredient_id %>
+                    </td>
+                    <td>
+                        <%=list[i].ingredient_name %>
+                    </td>
+                    <td>
+                        <%=list[i].ingredient_image %>
+                    </td>
+                </tr>
+                <% } %>
+        </tbody>
+    </table boader='1'>
+</body>
+
+</html>
