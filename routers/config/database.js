@@ -2,8 +2,8 @@ var mysql = require('mysql');
 var db_info = {
     host: 'localhost',
     port: '3306',
-    user: 'user',
-    password: '0000',
+    user: 'root',
+    password: '',
     database: 'test_db'
 }
 

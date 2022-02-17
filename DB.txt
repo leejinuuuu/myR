@@ -5,63 +5,125 @@ create database test_db;
 use test_db;
 
 create table ingredient (
-	ingredient_id varchar(100) not null primary key,
-	ingredient_name varchar(50) not null,
+	ingredient_name varchar(100) not null primary key,
 	ingredient_image varchar(50) null
-	);
+);
 
 create table cocktail (
-	cocktail_id varchar(100) not null primary key,
-	cocktail_name varchar(50) not null,
+	cocktail_name varchar(100) not null primary key,
 	cocktail_image varchar(50) null,
 	cocktail_writer varchar(1000) null,
-	cocktail_comment varchar(1000) null,
+	cocktail_explanation varchar(1000) null,
 	cocktail_glass varchar(1000) null,
 	cocktail_base varchar(50) null
-	);
-	
-create table settingCocktailWithIngredient(
-	num int auto_increment not null primary key,
-	cocktail_set_id varchar(100) not null,
-	ingredient_set_id varchar(50) not null,
-	vol varchar(30) not null,
-	index set_igd_index(cocktail_set_id),
-	foreign key(cocktail_set_id) references cocktail(cocktail_id) on delete cascade,
-	foreign key(ingredient_set_id) references ingredient(ingredient_id) on delete cascade	
 );
 
 create table user(
 	user_id varchar(100) not null primary key,
-	user_email varchar(100) not null,
 	user_password varchar(100) not null,
-	user_password varchar(100) not null
+	user_nickname varchar(100) not null
+);
+
+create table settingCocktailWithIngredient(
+	num int auto_increment not null primary key,
+	cocktail_name varchar(100) not null,
+	ingredient_name varchar(50) not null,
+	vol varchar(10) not null,
+	tool varchar(10) not null,
+
+	index set_igd_index(cocktail_name),
+	foreign key(cocktail_name) references cocktail(cocktail_name) on delete cascade,
+	foreign key(ingredient_name) references ingredient(ingredient_name) on delete cascade	
+);
+
+create table commentCocktailWithUser(
+	num int auto_increment not null primary key,
+	cocktail_name varchar(100) not null,
+	user_id varchar(100) not null,
+	comment varchar(1000) null,
+	time varchar(50) not null,
+
+	index set_igd_index(cocktail_name),
+	foreign key(cocktail_name) references cocktail(cocktail_name) on delete cascade,
+	foreign key(user_id) references user(user_id) on delete cascade
 );
 
 create table downloadUserWithCocktail(
 	num int auto_increment not null primary key,
-	cocktail_download_id varchar(100) not null,
-	user_download_id varchar(100) not null,
-	index set_igd_index(user_download_id),
-	foreign key(cocktail_download_id) references cocktail(cocktail_id) on delete cascade,
-	foreign key(user_download_id) references user(user_id) on delete cascade
+	cocktail_name varchar(100) not null,
+	user_id varchar(100) not null,
+
+	index set_igd_index(user_id),
+	foreign key(cocktail_name) references cocktail(cocktail_name) on delete cascade,
+	foreign key(user_id) references user(user_id) on delete cascade
 );
 
-insert into ingredient values ('1_id','1_name','1_image');
-insert into ingredient values ('2_id','2_name','2_image');
-insert into ingredient values ('3_id','3_name','3_image');
+alter database test_db default character set utf8;
+alter table ingredient convert to character set utf8;
+alter table cocktail convert to character set utf8;
+alter table settingCocktailWithIngredient convert to character set utf8;
+alter table user convert to character set utf8;
+alter table downloadUserWithCocktail convert to character set utf8;
 
-insert into cocktail values ('a_id', 'a_name', 'a_image', 'a_comment', 'a_base');
+/*
+재료 추가 쿼리문
+*/
+insert into ingredient(ingredient_name, ingredient_image)
+	select '1_name','1_image'
+	from dual where not exists(
+		select * from ingredient where ingredient_name='1_name');
+insert into ingredient(ingredient_name, ingredient_image)
+	select '2_name','2_image'
+	from dual where not exists(
+		select * from ingredient where ingredient_name='2_name');
+insert into ingredient(ingredient_name, ingredient_image)
+	select '3_name','3_image'
+	from dual where not exists(
+		select * from ingredient where ingredient_name='3_name');
 
-insert into settingingredient values (null, 'a_id', '1_id', '1oz');
-insert into settingingredient values (null, 'a_id', '2_id', '2oz');
-insert into settingingredient values (null, 'a_id', '4_id', '2oz'); // error
+/*
+칵테일 추가 쿼리문
+*/
+insert into cocktail(cocktail_name, cocktail_image, cocktail_writer, cocktail_explanation, cocktail_glass, cocktail_base)
+	select 'a_name', 'a_writer', 'a_image', 'a_explanation', 'a_glass', 'a_base'
+	from dual where not exists(
+		select * from cocktail where cocktail_name='a_name');
+insert into cocktail(cocktail_name, cocktail_image, cocktail_writer, cocktail_explanation, cocktail_glass, cocktail_base)
+	select 'b_name', 'b_writer', 'b_image', 'b_explanation', 'b_glass', 'b_base'
+	from dual where not exists(
+		select * from cocktail where cocktail_name='b_name');
+
+
+/*
+칵테일-재료 추가 쿼리문
+*/
+insert into settingCocktailWithIngredient(num, cocktail_name, ingredient_name, vol, tool)
+	select null,'a_name','1_name', '1', 'oz'
+	from dual where not exists(
+		select * from settingCocktailWithIngredient where cocktail_name='a_name' and ingredient_name='1_name');
+insert into settingCocktailWithIngredient(num, cocktail_name, ingredient_name, vol, tool)
+	select null,'a_name','2_name', '2', 'ml'
+	from dual where not exists(
+		select * from settingCocktailWithIngredient where cocktail_name='a_name' and ingredient_name='2_name');
+insert into settingCocktailWithIngredient(num, cocktail_name, ingredient_name, vol, tool)
+	select null,'b_name','1_name', '6.5', 'oz'
+	from dual where not exists(
+		select * from settingCocktailWithIngredient where cocktail_name='b_name' and ingredient_name='1_name');
+		
 
 select * from ingredient;
 select * from cocktail;
 select * from settingCocktailWithIngredient;
 
-select * from settingCocktailWithIngredient where settingCocktailWithIngredient.cocktail_set_id = 'a_id';
+select * from settingCocktailWithIngredient where settingCocktailWithIngredient.cocktail_id = 'a_id';
+
+insert into user values ('ㄱ_id', 'ㄱ_email', 'ㄱ_password', 'ㄱ_nickname');
+insert into downloadUserWithCocktail values (null, 'a_id', 'ㄱ_id');
+
+select * from user;
+select * from insert into downloadUserWithCocktail values (null, 'a_id', 'ㄱ_id');
 
 DELETE from ingredient WHERE ingredient_id="1_id";
 
 DELETE FROM COCKTAIL WHERE COCKTAIL_ID="a_id";
+
