@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
 router.get('/detail', function(req, res, next) {
     let{ingredient_name} = req.query;
 
-    console.log('respond with params : ingredient_name='+ingredient_name);
+    console.log('respond with ingredient params : ingredient_name='+ingredient_name);
 
     var sql = "select * from ingredient where ingredient_name=?";
     var params = [ingredient_name];
@@ -20,7 +20,7 @@ router.get('/detail', function(req, res, next) {
     conn.query(sql, params, function(err, rows, fields) {
         if (err) console.log('query is not excuted. select fail...\n' + err);
         // else res.render('data.ejs', { list: rows });
-        else res.json("true");
+        else res.json(rows);
     });
 });
 
