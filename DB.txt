@@ -93,9 +93,8 @@ insert into cocktail(cocktail_name, cocktail_image, cocktail_writer, cocktail_ex
 	from dual where not exists(
 		select * from cocktail where cocktail_name='b_name');
 
-
 /*
-칵테일-재료 추가 쿼리문
+조합-칵테일-재료 추가 쿼리문
 */
 insert into settingCocktailWithIngredient(num, cocktail_name, ingredient_name, vol, tool)
 	select null,'a_name','1_name', '1', 'oz'
@@ -115,15 +114,36 @@ select * from ingredient;
 select * from cocktail;
 select * from settingCocktailWithIngredient;
 
-select * from settingCocktailWithIngredient where settingCocktailWithIngredient.cocktail_id = 'a_id';
+select * from settingCocktailWithIngredient where settingCocktailWithIngredient.cocktail_name = 'a_name';
 
-insert into user values ('ㄱ_id', 'ㄱ_email', 'ㄱ_password', 'ㄱ_nickname');
-insert into downloadUserWithCocktail values (null, 'a_id', 'ㄱ_id');
+/*
+사용자 추가 쿼리문
+*/
+insert into user(user_id, user_password, user_nickname)
+	select 'user0_id', 'user0_password', 'user0_nickname'
+	from dual where not exists(
+		select * from user where user_id='user0_id');
+insert into user(user_id, user_password, user_nickname)
+	select 'user1_id', 'user1_password', 'user1_nickname'
+	from dual where not exists(
+		select * from user where user_id='user1_id');
+insert into user(user_id, user_password, user_nickname)
+	select 'user2_id', 'user2_password', 'user2_nickname'
+	from dual where not exists(
+		select * from user where user_id='user2_id');
+
+/*
+다운로드-사용자_칵테일조합 추가 쿼리문
+*/
+insert into downloadUserWithCocktail(num, cocktail_name, user_id)
+	select null, 'a_name', 'user0_id'
+	from dual where not exists(
+		select * from downloadUserWithCocktail where cocktail_name='a_name' and user_id='user0_id');
+
 
 select * from user;
-select * from insert into downloadUserWithCocktail values (null, 'a_id', 'ㄱ_id');
+select * from downloadUserWithCocktail;
 
 DELETE from ingredient WHERE ingredient_id="1_id";
-
 DELETE FROM COCKTAIL WHERE COCKTAIL_ID="a_id";
 
