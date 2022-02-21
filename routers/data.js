@@ -9,10 +9,12 @@ var bodyParser = require('body-parser');
 const ingredients = require('./ingredients');
 const cocktails = require('./cocktails');
 const users = require('./users');
+const images = require('./images');
 
 router.use('/ingredients', ingredients);
 router.use('/cocktails', cocktails);
 router.use('/users', users);
+router.use('/images', images);
 
 router.get('/', function(req, res, next) {
     res.send('data')

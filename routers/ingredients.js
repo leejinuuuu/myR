@@ -37,4 +37,8 @@ router.get('/list', function(req, res, next) {
     });
 });
 
+router.post('/add', function(req, res, next) {
+    
+})
+
 module.exports = router;

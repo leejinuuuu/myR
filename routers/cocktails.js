@@ -5,6 +5,10 @@ var db_config = require(__dirname + '/config/database.js');
 var conn = db_config.init();
 var bodyParser = require('body-parser');
 
+router.get('/', function(req, res, next) {
+    res.send('cocktails')
+});
+
 router.get('/detail', function(req, res, next) {
     let{cocktail_name} = req.query;
 
