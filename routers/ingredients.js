@@ -49,18 +49,6 @@ router.post('/add', function(req, res, next) {
     });
 });
 
-router.post('/add', function(req, res, next) {
-    let{ingredient_name, ingredient_image} = req.body;
-
-    console.log('request with params : ingredient_name='+ingredient_name+', ingredient_image='+ingredient_name);
-
-    var sql = "insert into ingredient(ingredient_name, ingredient_image) select \""+ingredient_name+"\", \""+ingredient_image+"\" from dual where not exists( select * from ingredient where ingredient_name=\""+ingredient_name+"\")";
-    conn.query(sql, function(err, rows, fields) {
-        if (err) console.log('body is not excuted. select fail...\n' + err);
-        else res.send("success")
-    });
-});
-
 router.post('/delete', function(req, res, next) {
     let{ingredient_name} = req.body;
 

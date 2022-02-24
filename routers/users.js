@@ -10,11 +10,11 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/detail', function(req, res, next) {
-    let{id, password} = req.body;
+    let{nickname} = req.body;
 
-    console.log('respond with user body : id='+id+', password='+password);
+    console.log('respond with user body : nickname='+nickname);
 
-    var sql = "select * from user where user_id=\""+id+"\" and user_password=\""+password+"\"";
+    var sql = "select * from user where user_nickname=\""+nickname+"\"";
     conn.query(sql, function(err, rows, fields) {
         if (err) console.log('query is not excuted. select fail...\n' + err);
         // else res.render('data.ejs', { list: rows });
@@ -36,7 +36,6 @@ router.post('/login', function(req, res, next) {
                 res.send("fail");
             else
                 res.send("success");
-            
         }
     });
 });
