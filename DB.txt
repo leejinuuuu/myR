@@ -11,8 +11,8 @@ create table ingredient (
 
 create table cocktail (
 	cocktail_name varchar(100) not null primary key,
-	cocktail_image varchar(50) null,
 	cocktail_writer varchar(1000) null,
+	cocktail_image varchar(50) null,
 	cocktail_explanation varchar(1000) null,
 	cocktail_glass varchar(1000) null,
 	cocktail_base varchar(50) null,
@@ -85,11 +85,11 @@ insert into ingredient(ingredient_name, ingredient_image)
 /*
 칵테일 추가 쿼리문
 */
-insert into cocktail(cocktail_name, cocktail_image, cocktail_writer, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source)
+insert into cocktail(cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source)
 	select 'a_name', 'a_writer', 'a_image', 'a_explanation', 'a_glass', 'a_base', null
 	from dual where not exists(
 		select * from cocktail where cocktail_name='a_name');
-insert into cocktail(cocktail_name, cocktail_image, cocktail_writer, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source)
+insert into cocktail(cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source)
 	select 'b_name', 'b_writer', 'b_image', 'b_explanation', 'b_glass', 'b_base', null
 	from dual where not exists(
 		select * from cocktail where cocktail_name='b_name');
@@ -134,9 +134,9 @@ insert into user(user_id, user_password, user_nickname)
 		select * from user where user_id='user2_id');
 
 insert into user(user_id, user_password, user_nickname) 
-	select "user4_id","user4_password","user4_id" 
+	select 'user4_id', 'user4_password', 'user4_nickname'
 	from dual where not exists(
-		select * from user where user_id="user4_id";
+		select * from user where user_id='user4_id');
 
 /*
 다운로드-사용자_칵테일조합 추가 쿼리문
@@ -155,6 +155,7 @@ select * from downloadUserWithCocktail;
 */
 delete from user where user_id='user0_id';
 delete from ingredient where ingredient_name='1_name';
+delete from cocktail where cocktail_name='a_name';
 
 /*
 수정 쿼리문
@@ -164,3 +165,6 @@ update user set user_nickname="userA_nickname" where user_id="user0_id" and user
 DELETE from ingredient WHERE ingredient_id="1_id";
 DELETE FROM COCKTAIL WHERE COCKTAIL_ID="a_id";
 
+select * from cocktail where cocktail_writer="a_writer";
+
+select cocktail.*, settingCocktailWithIngredient.ingredient_name, settingCocktailWithIngredient.vol, settingCocktailWithIngredient.tool from cocktail inner join settingCocktailWithIngredient on cocktail.cocktail_name = settingCocktailWithIngredient.cocktail_name;

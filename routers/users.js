@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/detail', function(req, res, next) {
-    let{nickname} = req.body;
+    let{nickname} = req.query;
 
     console.log('respond with user body : nickname='+nickname);
 
