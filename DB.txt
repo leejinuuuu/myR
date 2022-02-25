@@ -22,7 +22,8 @@ create table cocktail (
 create table user(
 	user_id varchar(100) not null primary key,
 	user_password varchar(100) not null,
-	user_nickname varchar(100) not null
+	user_nickname varchar(100) not null,
+	user_email varchar(100) not null
 );
 
 create table settingCocktailWithIngredient(
@@ -109,43 +110,58 @@ insert into settingCocktailWithIngredient(num, cocktail_name, ingredient_name, v
 	select null,'b_name','1_name', '6.5', 'oz'
 	from dual where not exists(
 		select * from settingCocktailWithIngredient where cocktail_name='b_name' and ingredient_name='1_name');
-		
 
 select * from ingredient;
 select * from cocktail;
 select * from settingCocktailWithIngredient;
+select * from downloadUserWithCocktail;
 
 select * from settingCocktailWithIngredient where settingCocktailWithIngredient.cocktail_name = 'a_name';
 
 /*
 사용자 추가 쿼리문
 */
-insert into user(user_id, user_password, user_nickname)
-	select 'user0_id', 'user0_password', 'user0_nickname'
+insert into user(user_id, user_password, user_nickname, user_email)
+	select 'user0_id', 'user0_password', 'user0_nickname', 'user0_email'
 	from dual where not exists(
 		select * from user where user_id='user0_id');
-insert into user(user_id, user_password, user_nickname)
-	select 'user1_id', 'user1_password', 'user1_nickname'
+insert into user(user_id, user_password, user_nickname, user_email)
+	select 'user1_id', 'user1_password', 'user1_nickname', 'user1_email'
 	from dual where not exists(
 		select * from user where user_id='user1_id');
-insert into user(user_id, user_password, user_nickname)
-	select 'user2_id', 'user2_password', 'user2_nickname'
+insert into user(user_id, user_password, user_nickname, user_email)
+	select 'user2_id', 'user2_password', 'user2_nickname', 'user2_email'
 	from dual where not exists(
 		select * from user where user_id='user2_id');
 
-insert into user(user_id, user_password, user_nickname) 
-	select 'user4_id', 'user4_password', 'user4_nickname'
+insert into user(user_id, user_password, user_nickname, user_email) 
+	select 'user4_id', 'user4_password', 'user4_nickname', 'user4_email'
 	from dual where not exists(
 		select * from user where user_id='user4_id');
-
+	
 /*
-다운로드-사용자_칵테일조합 추가 쿼리문
+다운로드-칵테일-사용자 추가 쿼리문
 */
 insert into downloadUserWithCocktail(num, cocktail_name, user_id)
-	select null, 'a_name', 'user0_id'
+	select null,'a_name','user0_id'
 	from dual where not exists(
 		select * from downloadUserWithCocktail where cocktail_name='a_name' and user_id='user0_id');
+insert into downloadUserWithCocktail(num, cocktail_name, user_id)
+	select null,'b_name','user0_id'
+	from dual where not exists(
+		select * from downloadUserWithCocktail where cocktail_name='b_name' and user_id='user0_id');
+insert into downloadUserWithCocktail(num, cocktail_name, user_id)
+	select null,'c_name','user0_id'
+	from dual where not exists(
+		select * from downloadUserWithCocktail where cocktail_name='c_name' and user_id='user0_id');
 
+/*
+댓글-칵테일-사용자 추가 쿼리문
+*/
+insert into commentCocktailWithUser(num, cocktail_name, user_id, comment, time)
+	select null,'a_name','user0_id','a_user0_comment0','time';
+insert into commentCocktailWithUser(num, cocktail_name, user_id, comment, time)
+	select null,'a_name','user0_id','a_user0_comment1','time';
 
 select * from user;
 select * from downloadUserWithCocktail;
@@ -167,4 +183,22 @@ DELETE FROM COCKTAIL WHERE COCKTAIL_ID="a_id";
 
 select * from cocktail where cocktail_writer="a_writer";
 
-select cocktail.*, settingCocktailWithIngredient.ingredient_name, settingCocktailWithIngredient.vol, settingCocktailWithIngredient.tool from cocktail inner join settingCocktailWithIngredient on cocktail.cocktail_name = settingCocktailWithIngredient.cocktail_name;
+/*
+조합_칵테일_재료조합 목록
+*/
+select cocktail.cocktail_name, settingCocktailWithIngredient.ingredient_name, settingCocktailWithIngredient.vol, settingCocktailWithIngredient.tool 
+	from cocktail 
+		inner join settingCocktailWithIngredient 
+			on cocktail.cocktail_name = settingCocktailWithIngredient.cocktail_name and cocktail.cocktail_name = "a_name";
+
+select cocktail.*, settingCocktailWithIngredient.*, 
+commentCocktailWithUser.user_id, 
+commentCocktailWithUser.comment, 
+commentCocktailWithUser.time 
+	from cocktail 
+		inner join settingCocktailWithIngredient on 
+			cocktail.cocktail_name=settingCocktailWithIngredient.cocktail_name 
+			and cocktail.cocktail_name="a_name" 
+		inner join commentCocktailWithUser on 
+			cocktail.cocktail_name=commentCocktailWithUser.cocktail_name 
+			and cocktail.cocktail_name="a_name";
