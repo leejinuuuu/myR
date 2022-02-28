@@ -2,9 +2,13 @@ const express = require('express')
 const app = express()
 var bodyParser = require('body-parser');
 
+const helmet = require('helmet');
+
 const port = 8080
 
 const dataRouter = require('./routers/data');
+
+app.use(helmet());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : false}));
