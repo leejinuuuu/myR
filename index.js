@@ -8,7 +8,9 @@ const port = 8080
 
 const dataRouter = require('./routers/data');
 
+//security
 app.use(helmet());
+app.disable('x-powered-by');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : false}));

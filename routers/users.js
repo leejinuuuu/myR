@@ -88,6 +88,19 @@ router.post('/delete', function(req, res, next) {
     });
 });
 
+router.delete('/delete', function(req, res, next) {
+    let{id, password} = req.body;
+
+    console.log('respond with user body : id='+id+', password='+password);
+
+    var sql = "delete from user where user_id=\""+id+"\" and user_password=\""+password+"\"";
+    conn.query(sql, function(err, rows, fields) {
+        if (err) console.log('query is not excuted. select fail...\n' + err);
+        // else res.render('data.ejs', { list: rows });
+        else res.send("success");
+    });
+});
+
 router.post('/modify', function(req, res, next) {
     let{id, password, nickname, email} = req.body;
 
