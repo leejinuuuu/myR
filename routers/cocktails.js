@@ -118,7 +118,7 @@ router.get('/list/standard', function(req, res, next) {
 // 칵테일 추가(이름이 이미 존재할 경우 추가하지 않고 에러를 반환)
 // 중복 검사
 router.post('/add', function(req, res, next) {
-    let{cocktail_name, cocktail_writer, cockatil_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source} = req.body;
+    let{cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source} = req.body;
     
     sql = "insert into "
         +"cocktail(cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source) "
@@ -136,7 +136,6 @@ router.post('/add', function(req, res, next) {
 });
 
 // 칵테일 제거(칵테일 이름이 동일한 객체를 삭제)
-// 중복 검사 필요없음
 router.delete('/:cocktail_name', function(req, res, next) {
     var params = req.params;
 
@@ -168,6 +167,30 @@ router.delete('/:cocktail_name', function(req, res, next) {
         }
     });
 
+});
+
+// 칵테일 수정(칵테일 이름을 기준으로 해당하는 객체 수정)
+router.put('/modify', function(req, res, next) {
+    let{bef_cocktail_name, aft_cocktail_name, aft_cocktail_writer, aft_cocktail_image, aft_cocktail_explanation, aft_cocktail_glass, aft_cocktail_base, aft_cocktail_source} = req.body;
+    
+    sql = "update cocktail "
+        +"set cocktail_name=\""+aft_cocktail_name+"\", "
+            +" cocktail_writer=\""+aft_cocktail_writer+"\", "
+            +" cocktail_image=\""+aft_cocktail_image+"\", "
+            +" cocktail_explanation=\""+aft_cocktail_explanation+"\", "
+            +" cocktail_glass=\""+aft_cocktail_glass+"\", "
+            +" cocktail_base=\""+aft_cocktail_base+"\", "
+            +" cocktail_source=\""+aft_cocktail_source+"\", "
+        +"where cocktail_name=\""+bef_cocktail_name+"\"";
+        
+    conn.query(sql, function(err, rows, fields) {
+        if (err) {
+            console.log('body is not excuted. select fail...\n' + err);
+            
+            res.send("fail")
+        }
+        else res.send("success")
+    });
 });
 
 module.exports = router;
