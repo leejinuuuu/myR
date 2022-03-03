@@ -1,60 +1,54 @@
 /*
 재료 추가 쿼리문
 */
-insert into ingredient(ingredient_name, ingredient_image)
-	select '1_name','1_image'
-	from dual where not exists(
-		select * from ingredient where ingredient_name='1_name');
-insert into ingredient(ingredient_name, ingredient_image)
-	select '2_name','2_image'
-	from dual where not exists(
-		select * from ingredient where ingredient_name='2_name');
-insert into ingredient(ingredient_name, ingredient_image)
-	select '3_name','3_image'
-	from dual where not exists(
-		select * from ingredient where ingredient_name='3_name');
-
 insert into 
-	ingredient(ingredient_name, ingredient_image)
-	values ('4_name', '4_image');
+	ingredient(ingredient_uuid, ingredient_name, ingredient_image)
+	values (uuid(), '1_name', '1_image');
+insert into 
+	ingredient(ingredient_uuid, ingredient_name, ingredient_image)
+	values (uuid(), '2_name', '2_image');
+insert into 
+	ingredient(ingredient_uuid, ingredient_name, ingredient_image)
+	values (uuid(), '3_name', '3_image');
+insert into 
+	ingredient(ingredient_uuid, ingredient_name, ingredient_image)
+	values (uuid(), '4_name', '4_image');
 
 
 /*
 칵테일 추가 쿼리문
 */
-insert into cocktail(cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source)
-	select 'a_name', 'a_writer', 'a_image', 'a_explanation', 'a_glass', 'a_base', null
-	from dual where not exists(
-		select * from cocktail where cocktail_name='a_name');
-insert into cocktail(cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source)
-	select 'b_name', 'b_writer', 'b_image', 'b_explanation', 'b_glass', 'b_base', null
-	from dual where not exists(
-		select * from cocktail where cocktail_name='b_name');
-
 insert into 
-	cocktail(cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source) 
-	values ('c_name', 'c_writer', 'c_image', 'c_explanation', 'c_glass', 'c_base', null);
+	cocktail(cocktail_uuid, cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source) 
+	values (uuid(), 'a_name', 'a_writer', 'a_image', 'a_explanation', 'a_glass', 'a_base', null);
+insert into 
+	cocktail(cocktail_uuid, cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source) 
+	values (uuid(), 'b_name', 'b_writer', 'b_image', 'b_explanation', 'b_glass', 'b_base', null);
+insert into 
+	cocktail(cocktail_uuid, cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source) 
+	values (uuid(), 'c_name', 'c_writer', 'c_image', 'c_explanation', 'c_glass', 'c_base', null);
 
+//이거 밑으로 수정필요
 
 /*
 조합-칵테일-재료 추가 쿼리문
 */
-insert into settingCocktailWithIngredient(num, cocktail_name, ingredient_name, vol, tool)
-	select null,'a_name','1_name', '1', 'oz'
+insert into settingCocktailWithIngredient(settingCocktailWithIngredient_uuid, cocktail_name, ingredient_name, vol, tool)
+	select uuid(),'a_name','1_name', '1', 'oz'
 	from dual where not exists(
 		select * from settingCocktailWithIngredient where cocktail_name='a_name' and ingredient_name='1_name');
-insert into settingCocktailWithIngredient(num, cocktail_name, ingredient_name, vol, tool)
-	select null,'a_name','2_name', '2', 'ml'
+insert into settingCocktailWithIngredient(settingCocktailWithIngredient_uuid, cocktail_name, ingredient_name, vol, tool)
+	select uuid(),'a_name','2_name', '2', 'ml'
 	from dual where not exists(
 		select * from settingCocktailWithIngredient where cocktail_name='a_name' and ingredient_name='2_name');
-insert into settingCocktailWithIngredient(num, cocktail_name, ingredient_name, vol, tool)
-	select null,'b_name','1_name', '6.5', 'oz'
+insert into settingCocktailWithIngredient(settingCocktailWithIngredient_uuid, cocktail_name, ingredient_name, vol, tool)
+	select uuid(),'b_name','1_name', '6.5', 'oz'
 	from dual where not exists(
 		select * from settingCocktailWithIngredient where cocktail_name='b_name' and ingredient_name='1_name');
 
 insert into 
-	settingCocktailWithIngredient(num, cocktail_name, ingredient_name, vol, tool)
-	values (null, 'a_name', '3_name', '1', 'oz');
+	settingCocktailWithIngredient(settingCocktailWithIngredient_uuid, cocktail_name, ingredient_name, vol, tool)
+	values (uuid(), 'a_name', '3_name', '1', 'oz');
 
 
 select * from ingredient;

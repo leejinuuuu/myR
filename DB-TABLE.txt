@@ -5,12 +5,14 @@ create database test_db;
 use test_db;
 
 create table ingredient (
-	ingredient_name varchar(100) not null primary key,
+	ingredient_uuid varchar(100) not null primary key,
+	ingredient_name varchar(100) not null,
 	ingredient_image varchar(50) null
 );
 
 create table cocktail (
-	cocktail_name varchar(100) not null primary key,
+	cocktail_uuid varchar(100) not null primary key,
+	cocktail_name varchar(100) not null,
 	cocktail_writer varchar(1000) null,
 	cocktail_image varchar(50) null,
 	cocktail_explanation varchar(1000) null,
@@ -26,8 +28,12 @@ create table user(
 	user_email varchar(100) not null
 );
 
+/*
+combinations
+*/
+
 create table settingCocktailWithIngredient(
-	num int auto_increment not null primary key,
+	settingCocktailWithIngredient_uuid varchar(100) not null primary key,
 	cocktail_name varchar(100) not null,
 	ingredient_name varchar(50) not null,
 	vol varchar(10) not null,
@@ -39,7 +45,7 @@ create table settingCocktailWithIngredient(
 );
 
 create table commentCocktailWithUser(
-	num int auto_increment not null primary key,
+	commentCocktailWithUser_uuid varchar(100) not null primary key,
 	cocktail_name varchar(100) not null,
 	user_id varchar(100) not null,
 	comment varchar(1000) null,
@@ -51,7 +57,7 @@ create table commentCocktailWithUser(
 );
 
 create table downloadUserWithCocktail(
-	num int auto_increment not null primary key,
+	downloadUserWithCocktail_uuid varchar(100) not null primary key,
 	cocktail_name varchar(100) not null,
 	user_id varchar(100) not null,
 
