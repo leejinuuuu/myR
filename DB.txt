@@ -253,12 +253,11 @@ CREATE FUNCTION levenshtein( s1 VARCHAR(255), s2 VARCHAR(255) )
 DELIMITER ;
 
 /*
-TO FIND SIMILARITY
+TO FIND SIMILARITY FUNC
 */
-
 select
 	ingredient_name,
-	levenshtein(ingredient_name, '1_nama') as distance
+	levenshtein(ingredient_name, '2') as distance
 from ingredient
 where	
 	ingredient_name
