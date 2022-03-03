@@ -1,72 +1,3 @@
-drop database test_db;
-
-create database test_db;
-
-use test_db;
-
-create table ingredient (
-	ingredient_name varchar(100) not null primary key,
-	ingredient_image varchar(50) null
-);
-
-create table cocktail (
-	cocktail_name varchar(100) not null primary key,
-	cocktail_writer varchar(1000) null,
-	cocktail_image varchar(50) null,
-	cocktail_explanation varchar(1000) null,
-	cocktail_glass varchar(1000) null,
-	cocktail_base varchar(50) null,
-	cocktail_source varchar(1000) null
-);
-
-create table user(
-	user_id varchar(100) not null primary key,
-	user_password varchar(100) not null,
-	user_nickname varchar(100) not null,
-	user_email varchar(100) not null
-);
-
-create table settingCocktailWithIngredient(
-	num int auto_increment not null primary key,
-	cocktail_name varchar(100) not null,
-	ingredient_name varchar(50) not null,
-	vol varchar(10) not null,
-	tool varchar(10) not null,
-
-	index set_igd_index(cocktail_name),
-	foreign key(cocktail_name) references cocktail(cocktail_name) on delete cascade,
-	foreign key(ingredient_name) references ingredient(ingredient_name) on delete cascade	
-);
-
-create table commentCocktailWithUser(
-	num int auto_increment not null primary key,
-	cocktail_name varchar(100) not null,
-	user_id varchar(100) not null,
-	comment varchar(1000) null,
-	time varchar(50) not null,
-
-	index set_igd_index(cocktail_name),
-	foreign key(cocktail_name) references cocktail(cocktail_name) on delete cascade,
-	foreign key(user_id) references user(user_id) on delete cascade
-);
-
-create table downloadUserWithCocktail(
-	num int auto_increment not null primary key,
-	cocktail_name varchar(100) not null,
-	user_id varchar(100) not null,
-
-	index set_igd_index(user_id),
-	foreign key(cocktail_name) references cocktail(cocktail_name) on delete cascade,
-	foreign key(user_id) references user(user_id) on delete cascade
-);
-
-alter database test_db default character set utf8;
-alter table ingredient convert to character set utf8;
-alter table cocktail convert to character set utf8;
-alter table settingCocktailWithIngredient convert to character set utf8;
-alter table user convert to character set utf8;
-alter table downloadUserWithCocktail convert to character set utf8;
-
 /*
 재료 추가 쿼리문
 */
@@ -83,6 +14,11 @@ insert into ingredient(ingredient_name, ingredient_image)
 	from dual where not exists(
 		select * from ingredient where ingredient_name='3_name');
 
+insert into 
+	ingredient(ingredient_name, ingredient_image)
+	values ('4_name', '4_image');
+
+
 /*
 칵테일 추가 쿼리문
 */
@@ -94,6 +30,11 @@ insert into cocktail(cocktail_name, cocktail_writer, cocktail_image, cocktail_ex
 	select 'b_name', 'b_writer', 'b_image', 'b_explanation', 'b_glass', 'b_base', null
 	from dual where not exists(
 		select * from cocktail where cocktail_name='b_name');
+
+insert into 
+	cocktail(cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source) 
+	values ('c_name', 'c_writer', 'c_image', 'c_explanation', 'c_glass', 'c_base', null);
+
 
 /*
 조합-칵테일-재료 추가 쿼리문
@@ -111,12 +52,16 @@ insert into settingCocktailWithIngredient(num, cocktail_name, ingredient_name, v
 	from dual where not exists(
 		select * from settingCocktailWithIngredient where cocktail_name='b_name' and ingredient_name='1_name');
 
+insert into 
+	settingCocktailWithIngredient(num, cocktail_name, ingredient_name, vol, tool)
+	values (null, 'a_name', '3_name', '1', 'oz');
+
+
 select * from ingredient;
 select * from cocktail;
 select * from settingCocktailWithIngredient;
 select * from downloadUserWithCocktail;
 
-select * from settingCocktailWithIngredient where settingCocktailWithIngredient.cocktail_name = 'a_name';
 
 /*
 사용자 추가 쿼리문
@@ -133,12 +78,16 @@ insert into user(user_id, user_password, user_nickname, user_email)
 	select 'user2_id', 'user2_password', 'user2_nickname', 'user2_email'
 	from dual where not exists(
 		select * from user where user_id='user2_id');
-
 insert into user(user_id, user_password, user_nickname, user_email) 
 	select 'user4_id', 'user4_password', 'user4_nickname', 'user4_email'
 	from dual where not exists(
 		select * from user where user_id='user4_id');
-	
+
+insert into 
+	user(user_id, user_password, user_nickname, user_email) 
+	values ('user5_id', 'user5_password', 'user5_nickname', 'user5_email');
+
+
 /*
 다운로드-칵테일-사용자 추가 쿼리문
 */
@@ -154,7 +103,12 @@ insert into downloadUserWithCocktail(num, cocktail_name, user_id)
 	select null,'c_name','user0_id'
 	from dual where not exists(
 		select * from downloadUserWithCocktail where cocktail_name='c_name' and user_id='user0_id');
+		
+insert into 
+	downloadUserWithCocktail(num, cocktail_name, user_id)
+	values (null,'c_name','user4_id');
 
+	
 /*
 댓글-칵테일-사용자 추가 쿼리문
 */
@@ -162,6 +116,11 @@ insert into commentCocktailWithUser(num, cocktail_name, user_id, comment, time)
 	select null,'a_name','user0_id','a_user0_comment0','time';
 insert into commentCocktailWithUser(num, cocktail_name, user_id, comment, time)
 	select null,'a_name','user0_id','a_user0_comment1','time';
+
+insert into 
+	commentCocktailWithUser(num, cocktail_name, user_id, comment, time)
+	values (null, 'b_name', 'user0_id', 'b_user0_comment0', 'time');
+
 
 select * from user;
 select * from downloadUserWithCocktail;
@@ -263,4 +222,6 @@ where
 	ingredient_name
 order by
 	distance
-	asc;
+	asc
+limit
+	3;

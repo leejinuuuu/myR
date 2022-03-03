@@ -18,20 +18,14 @@ const storage = multer.diskStorage({
   
 var upload = multer({ storage: storage })
 
-router.get('/', function(req, res, next) {
-    res.send('images')
-});
-
 router.post(['/uploads'], upload.any(), (req, res) => {
-    console.log(req.body);
-    console.log(req.files);
     res.send("success");
 });
 
-router.get('/name', function(req, res, next) {
-    let{image_name}=req.query;
-    if(image_name != null) {
-        fs.readFile(__dirname + '\\res\\' + image_name, function(err, data) {
+router.get('/:name', function(req, res, next) {
+    var params = req.params;
+    if(params.name != null) {
+        fs.readFile(__dirname + '\\res\\' + params.name, function(err, data) {
             res.writeHead(200);
             res.write(data);
             res.end();
