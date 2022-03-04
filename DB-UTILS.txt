@@ -3,16 +3,16 @@
 */
 insert into 
 	ingredient(ingredient_uuid, ingredient_name, ingredient_image)
-	values (uuid(), '1_name', '1_image');
+	values ('1', '1_name', '1_image');
 insert into 
 	ingredient(ingredient_uuid, ingredient_name, ingredient_image)
-	values (uuid(), '2_name', '2_image');
+	values ('2', '2_name', '2_image');
 insert into 
 	ingredient(ingredient_uuid, ingredient_name, ingredient_image)
-	values (uuid(), '3_name', '3_image');
+	values ('3', '3_name', '3_image');
 insert into 
 	ingredient(ingredient_uuid, ingredient_name, ingredient_image)
-	values (uuid(), '4_name', '4_image');
+	values ('4', '4_name', '4_image');
 
 
 /*
@@ -20,104 +20,87 @@ insert into
 */
 insert into 
 	cocktail(cocktail_uuid, cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source) 
-	values (uuid(), 'a_name', 'a_writer', 'a_image', 'a_explanation', 'a_glass', 'a_base', null);
+	values ('a', 'a_name', 'a_writer', 'a_image', 'a_explanation', 'a_glass', 'a_base', null);
 insert into 
 	cocktail(cocktail_uuid, cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source) 
-	values (uuid(), 'b_name', 'b_writer', 'b_image', 'b_explanation', 'b_glass', 'b_base', null);
+	values ('b', 'b_name', 'b_writer', 'b_image', 'b_explanation', 'b_glass', 'b_base', null);
 insert into 
 	cocktail(cocktail_uuid, cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source) 
-	values (uuid(), 'c_name', 'c_writer', 'c_image', 'c_explanation', 'c_glass', 'c_base', null);
-
-//이거 밑으로 수정필요
+	values ('c', 'c_name', 'c_writer', 'c_image', 'c_explanation', 'c_glass', 'c_base', null);
 
 /*
 조합-칵테일-재료 추가 쿼리문
 */
-insert into settingCocktailWithIngredient(settingCocktailWithIngredient_uuid, cocktail_name, ingredient_name, vol, tool)
-	select uuid(),'a_name','1_name', '1', 'oz'
-	from dual where not exists(
-		select * from settingCocktailWithIngredient where cocktail_name='a_name' and ingredient_name='1_name');
-insert into settingCocktailWithIngredient(settingCocktailWithIngredient_uuid, cocktail_name, ingredient_name, vol, tool)
-	select uuid(),'a_name','2_name', '2', 'ml'
-	from dual where not exists(
-		select * from settingCocktailWithIngredient where cocktail_name='a_name' and ingredient_name='2_name');
-insert into settingCocktailWithIngredient(settingCocktailWithIngredient_uuid, cocktail_name, ingredient_name, vol, tool)
-	select uuid(),'b_name','1_name', '6.5', 'oz'
-	from dual where not exists(
-		select * from settingCocktailWithIngredient where cocktail_name='b_name' and ingredient_name='1_name');
-
 insert into 
-	settingCocktailWithIngredient(settingCocktailWithIngredient_uuid, cocktail_name, ingredient_name, vol, tool)
-	values (uuid(), 'a_name', '3_name', '1', 'oz');
+	settingCocktailWithIngredient(settingCocktailWithIngredient_uuid, cocktail_uuid, cocktail_name, ingredient_uuid, ingredient_name, vol, tool)
+	values (uuid(), 'a', 'a_name', '1', '1_name', '1', 'oz');
+insert into 
+	settingCocktailWithIngredient(settingCocktailWithIngredient_uuid, cocktail_uuid, cocktail_name, ingredient_uuid, ingredient_name, vol, tool)
+	values (uuid(), 'a', 'a_name', '2', '2_name', '28', 'ml');
+insert into 
+	settingCocktailWithIngredient(settingCocktailWithIngredient_uuid, cocktail_uuid, cocktail_name, ingredient_uuid, ingredient_name, vol, tool)
+	values (uuid(), 'b', 'b_name', '3', '3_name', '4.5', 'oz');
+insert into 
+	settingCocktailWithIngredient(settingCocktailWithIngredient_uuid, cocktail_uuid, cocktail_name, ingredient_uuid, ingredient_name, vol, tool)
+	values (uuid(), 'b', 'b_name', '1', '1_name', '1', 'oz');
 
 
 select * from ingredient;
 select * from cocktail;
 select * from settingCocktailWithIngredient;
-select * from downloadUserWithCocktail;
+
 
 
 /*
 사용자 추가 쿼리문
 */
-insert into user(user_id, user_password, user_nickname, user_email)
-	select 'user0_id', 'user0_password', 'user0_nickname', 'user0_email'
-	from dual where not exists(
-		select * from user where user_id='user0_id');
-insert into user(user_id, user_password, user_nickname, user_email)
-	select 'user1_id', 'user1_password', 'user1_nickname', 'user1_email'
-	from dual where not exists(
-		select * from user where user_id='user1_id');
-insert into user(user_id, user_password, user_nickname, user_email)
-	select 'user2_id', 'user2_password', 'user2_nickname', 'user2_email'
-	from dual where not exists(
-		select * from user where user_id='user2_id');
-insert into user(user_id, user_password, user_nickname, user_email) 
-	select 'user4_id', 'user4_password', 'user4_nickname', 'user4_email'
-	from dual where not exists(
-		select * from user where user_id='user4_id');
-
+insert into 
+	user(user_id, user_password, user_nickname, user_email) 
+	values ('user1_id', 'user1_password', 'user1_nickname', 'user1_email');
+insert into 
+	user(user_id, user_password, user_nickname, user_email) 
+	values ('user2_id', 'user2_password', 'user2_nickname', 'user2_email');
+insert into 
+	user(user_id, user_password, user_nickname, user_email) 
+	values ('user3_id', 'user3_password', 'user3_nickname', 'user3_email');
+insert into 
+	user(user_id, user_password, user_nickname, user_email) 
+	values ('user4_id', 'user4_password', 'user4_nickname', 'user4_email');
 insert into 
 	user(user_id, user_password, user_nickname, user_email) 
 	values ('user5_id', 'user5_password', 'user5_nickname', 'user5_email');
 
-
 /*
 다운로드-칵테일-사용자 추가 쿼리문
-*/
-insert into downloadUserWithCocktail(num, cocktail_name, user_id)
-	select null,'a_name','user0_id'
-	from dual where not exists(
-		select * from downloadUserWithCocktail where cocktail_name='a_name' and user_id='user0_id');
-insert into downloadUserWithCocktail(num, cocktail_name, user_id)
-	select null,'b_name','user0_id'
-	from dual where not exists(
-		select * from downloadUserWithCocktail where cocktail_name='b_name' and user_id='user0_id');
-insert into downloadUserWithCocktail(num, cocktail_name, user_id)
-	select null,'c_name','user0_id'
-	from dual where not exists(
-		select * from downloadUserWithCocktail where cocktail_name='c_name' and user_id='user0_id');
-		
+*/	
 insert into 
-	downloadUserWithCocktail(num, cocktail_name, user_id)
-	values (null,'c_name','user4_id');
+	downloadUserWithCocktail(downloadUserWithCocktail_uuid, cocktail_uuid, cocktail_name, user_id)
+	values (uuid(),'a','a_name','user1_id');	
+insert into 
+	downloadUserWithCocktail(downloadUserWithCocktail_uuid, cocktail_uuid, cocktail_name, user_id)
+	values (uuid(),'b','b_name','user1_id');
+insert into 
+	downloadUserWithCocktail(downloadUserWithCocktail_uuid, cocktail_uuid, cocktail_name, user_id)
+	values (uuid(),'c','c_name','user2_id');	
 
 	
 /*
 댓글-칵테일-사용자 추가 쿼리문
 */
-insert into commentCocktailWithUser(num, cocktail_name, user_id, comment, time)
-	select null,'a_name','user0_id','a_user0_comment0','time';
-insert into commentCocktailWithUser(num, cocktail_name, user_id, comment, time)
-	select null,'a_name','user0_id','a_user0_comment1','time';
-
 insert into 
-	commentCocktailWithUser(num, cocktail_name, user_id, comment, time)
-	values (null, 'b_name', 'user0_id', 'b_user0_comment0', 'time');
+	commentCocktailWithUser(commentCocktailWithUser_uuid, cocktail_uuid, cocktail_name, user_id, comment, time)
+	values (uuid(), 'b', 'b_name', 'user1_id', 'b_user1_comment0', 'time');
+insert into 
+	commentCocktailWithUser(commentCocktailWithUser_uuid, cocktail_uuid, cocktail_name, user_id, comment, time)
+	values (uuid(), 'b', 'b_name', 'user2_id', 'b_user2_comment0', 'time');
+insert into 
+	commentCocktailWithUser(commentCocktailWithUser_uuid, cocktail_uuid, cocktail_name, user_id, comment, time)
+	values (uuid(), 'a', 'a_name', 'user3_id', 'a_user3_comment0', 'time');
 
 
 select * from user;
 select * from downloadUserWithCocktail;
+select * from commentCocktailWithUser;
 
 /*
 삭제 쿼리문
