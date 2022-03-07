@@ -91,10 +91,10 @@ router.post('/download', function(req, res, next) {
 
 // 다운로드 테이블에서 사용자 이름과 칵테일 이름, 두 값이 동시에 일치하면 삭제
 router.delete('/download', function(req, res, next) {
-    let{user_id, cocktail_name} = req.body;
+    let{user_id, cocktail_uuid} = req.body;
 
-    var sql = "delete from downloadUserWithCocktail where user_id=? and cocktail_name=?"
-    var params = [user_id, cocktail_name];
+    var sql = "delete from downloadUserWithCocktail where user_id=? and cocktail_uuid=?"
+    var params = [user_id, cocktail_uuid];
 
     conn.query(sql, params, function(err, rows, fields) {
         if (err) {

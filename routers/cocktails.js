@@ -63,7 +63,7 @@ router.post('/add', function(req, res, next) {
 });
 
 
-// 칵테일 수정(칵테일 이름을 기준으로 해당하는 객체 수정)
+// 칵테일 수정(칵테일 UUID을 기준으로 해당하는 객체 수정)
 router.put('/modify', function(req, res, next) {
     let{bef_cocktail_uuid, aft_cocktail_name, aft_cocktail_writer, aft_cocktail_image, aft_cocktail_explanation, aft_cocktail_glass, aft_cocktail_base, aft_cocktail_source} = req.body;
     
@@ -87,7 +87,7 @@ router.put('/modify', function(req, res, next) {
     });
 });
 
-// 칵테일 이름으로 칵테일 이름과 관련된 모든 정보들 추출
+// 칵테일 이름으로 칵테일 UUID과 관련된 모든 정보들 추출
 router.get('/:cocktail_uuid', function(req, res, next) {
     var params = req.params;
 
@@ -161,7 +161,7 @@ router.get('/:cocktail_uuid', function(req, res, next) {
     });
 });
 
-// 칵테일 제거(칵테일 이름이 동일한 객체를 삭제)
+// 칵테일 제거(칵테일 UUID이 동일한 객체를 삭제)
 router.delete('/:cocktail_uuid', function(req, res, next) {
     var params = req.params;
 
