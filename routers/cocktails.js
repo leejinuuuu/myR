@@ -28,7 +28,7 @@ router.get('/list', function(req, res, next) {
 router.get('/list/standard', function(req, res, next) {
     let{show_std, show_std_content, start, end} = req.body;
 
-    sql = "select * from cocktail where "+show_std+"=\""+show_std_content+"\" order by cocktail_writer limit "+Math.abs(end-start);
+    sql = "select * from cocktail where "+show_std+"=\""+show_std_content+"\" order by cocktail_writer limit "+start+", "+end;
     conn.query(sql, function(err, rows, fields) {
         if (err) {
             console.log('body is not excuted. select fail...\n' + err);

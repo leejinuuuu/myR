@@ -10,7 +10,7 @@ var sql;
 router.get('/search', function(req, res, next) {
     let{search_table, search_std, search_content, start, end} = req.body;
 
-    sql = "select "+search_std+", levenshtein("+search_std+", ?) as distance from "+search_table+" where "+search_std+" order by distance asc limit " + (end-start);
+    sql = "select "+search_std+", levenshtein("+search_std+", ?) as distance from "+search_table+" where "+search_std+" order by distance asc limit "+start+", "+end;
  
     var params = [search_content];
     conn.query(sql, params, function(err, rows, fields) {

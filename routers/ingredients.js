@@ -10,7 +10,7 @@ var sql;
 router.get('/list', function(req, res, next) {
     let{start, end} = req.body;
 
-    sql = "select * from ingredient order by ingredient_name limit "+(end-start);
+    sql = "select * from ingredient order by ingredient_name limit "+start+", "+end;
     conn.query(sql, function(err, rows, fields) {
         if (err) {
             console.log('body is not excuted. select fail...\n' + err);
