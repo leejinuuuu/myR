@@ -1,10 +1,30 @@
 var express = require('express');
 var router = express.Router();
 
-var db_config = require(__dirname + '/config/database.js');
-var conn = db_config.init();
+const multer = require('multer');
+const path = require('path');
+var fs = require('fs');
 
-var sql;
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, basePath);
+    },
+  
+    filename: function(req, file, cb) {
+        var i = 1;
+        var fileName = file.originalname
+
+        while(fs.existsSync(basePath+fileName)) {
+            fileName = file.originalname.slice(0, -4).concat("("+i+")").concat(file.originalname.substring(file.originalname.lastIndexOf('.'), file.originalname.length));
+            i++;
+        }
+
+        save_fileName = fileName;
+        cb(null, fileName);
+    }
+  });
+
+var upload = multer({ storage: storage })
 
 // 칵테일 이름 기준으로 나열된 칵테일 리스트 중 일부
 router.get('/ls', function(req, res, next) {
@@ -42,14 +62,18 @@ router.get('/ls/std', function(req, res, next) {
     });
 });
 
-router.post('/add', function(req, res, next) {
-    let{cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source} = req.body;
+router.post('/add', upload.any(), function(req, res, next) {
+    let cocktail_file_name = req.files[0].originalname;
+    let{cocktail_name, cocktail_writer, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source} = req.body;
     
     sql = "insert into "
         +"cocktail(cocktail_uuid, cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source) "
         +"values (uuid(), ?, ?, ?, ?, ?, ?, ?)";
 
-    var params = [cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source];
+    if(save_fileName == null)
+        save_fileName = cocktail_file_name;
+
+    var params = [cocktail_name, cocktail_writer, save_fileName, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source];
     conn.query(sql, params, function(err, rows, fields) {
         if (err) {
             console.log('body is not excuted. select fail...\n' + err);
@@ -59,7 +83,6 @@ router.post('/add', function(req, res, next) {
         else res.send("success")
     });
 });
-
 
 // 칵테일 수정(칵테일 UUID을 기준으로 해당하는 객체 수정)
 router.put('/mod', function(req, res, next) {

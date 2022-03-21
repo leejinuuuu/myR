@@ -4,6 +4,33 @@ var router = express.Router();
 var db_config = require(__dirname + '/config/database.js');
 var conn = db_config.init();
 
+const multer = require('multer');
+const path = require('path');
+var fs = require('fs');
+
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, basePath);
+    },
+  
+    filename: function(req, file, cb) {
+        var i = 1;
+        var fileName = file.originalname
+
+        while(fs.existsSync(basePath+fileName)) {
+            fileName = file.originalname.slice(0, -4).concat("("+i+")").concat(file.originalname.substring(file.originalname.lastIndexOf('.'), file.originalname.length));
+            i++;
+        }
+
+        save_fileName = fileName;
+        cb(null, fileName);
+    }
+  });
+
+var upload = multer({ storage: storage })
+
+var save_fileName;
+
 var sql;
 
 // 재료 이름을 기준으로 나열된 재료 리스트 중 일부
@@ -26,21 +53,25 @@ router.get('/ls', function(req, res, next) {
 
 // 재료 추가(이름이 이미 존재할 경우 추가하지 않고 에러를 반환)
 // 중복 검사
-router.post('/add', function(req, res, next) {
-    let{ingredient_name, ingredient_image} = req.body;
+router.post('/add', upload.any(), function(req, res, next) {
+    let ingredient_file_name = req.files[0].originalname;
+    let {ingredient_name} = req.body;
 
     sql = "insert into"
     +" ingredient(ingredient_uuid, ingredient_name, ingredient_image)"
     +" values (uuid(), ?, ?)";
 
-    var params = [ingredient_name, ingredient_image];
+    if(save_fileName == null)
+        save_fileName = ingredient_file_name;
+
+    var params = [ingredient_name, save_fileName];
     conn.query(sql, params, function(err, rows, fields) {
         if (err) {
             console.log('body is not excuted. select fail...\n' + err);
             
             res.send("fail")
         }   
-        else res.json("success");
+        else res.send("success");
     });
 });
 
