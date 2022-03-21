@@ -23,7 +23,7 @@ var sql;
 
 // 칵테일 이름에 해당하는 칵테일에 재료, 용량, 도구 추가
 // 중복 검사 안함
-router.post('/setting', function(req, res, next) {
+router.post('/set', function(req, res, next) {
     let{cocktail_uuid, cocktail_name, ingredient_uuid, ingredient_name, vol, tool} = req.body;
 
     sql = "insert into settingCocktailWithIngredient(settingCocktailWithIngredient_uuid, cocktail_uuid, cocktail_name, ingredient_uuid, ingredient_name, vol, tool)"
@@ -39,7 +39,7 @@ router.post('/setting', function(req, res, next) {
         else res.send("success")
     });
 });
-router.delete('/setting', function(req, res, next) {
+router.delete('/set', function(req, res, next) {
     let{cocktail_uuid, ingredient_uuid} = req.body;
 
     sql = "delete from settingCocktailWithIngredient where cocktail_uuid=? and ingredient_uuid=?"
@@ -72,7 +72,7 @@ router.delete('/setting', function(req, res, next) {
 
 // 다운로드 테이블에 사용자 이름과 칵테일 이름을 묶어 한 행으로 추가
 // 중복 검사
-router.post('/download', function(req, res, next) {
+router.post('/dl', function(req, res, next) {
     let{user_id, cocktail_uuid, cocktail_name} = req.body;
 
     sql = "insert into downloadUserWithCocktail(downloadUserWithCocktail_uuid, cocktail_uuid, cocktail_name, user_id)"
@@ -90,7 +90,7 @@ router.post('/download', function(req, res, next) {
 });
 
 // 다운로드 테이블에서 사용자 이름과 칵테일 이름, 두 값이 동시에 일치하면 삭제
-router.delete('/download', function(req, res, next) {
+router.delete('/dl', function(req, res, next) {
     let{user_id, cocktail_uuid} = req.body;
 
     var sql = "delete from downloadUserWithCocktail where user_id=? and cocktail_uuid=?"
@@ -107,7 +107,7 @@ router.delete('/download', function(req, res, next) {
 });
 
 // 댓글 테이블에서 칵테일 이름과 사용자 아이디 행을 추가
-router.post('/comment', function(req, res, next) {
+router.post('/cm', function(req, res, next) {
     let{cocktail_uuid, cocktail_name, user_id, comment} = req.body;
 
     let today = new Date();   
@@ -133,7 +133,7 @@ router.post('/comment', function(req, res, next) {
 });
 
 //댓글 테이블에서 칵테일 이름과 사용자 아이디, 댓글, 시간을 기준으로 일치하는 행을 삭제
-router.delete('/comment', function(req, res, next) {
+router.delete('/cm', function(req, res, next) {
     let{cocktail_uuid, user_id, comment, time} = req.body;
 
     var sql = "delete from commentCocktailWithUser where user_id=? and cocktail_uuid=? and comment=? and time=?"

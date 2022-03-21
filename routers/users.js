@@ -65,7 +65,7 @@ router.get('/search', function(req, res, next) {
 })
 
 // 사용자 아이디, 비밀번호, 이메일을 기준으로 해당하는 사용자의 사용자 닉네임을 수정
-router.put('/modify', function(req, res, next) {
+router.put('/mod', function(req, res, next) {
     let{id, password, nickname, email} = req.body;
 
     sql = "update user set user_nickname=\""+nickname+"\" where user_id=\""+id+"\" and user_password=\""+password+"\" and user_email=\""+email+"\""; 

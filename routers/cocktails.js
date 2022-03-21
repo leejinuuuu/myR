@@ -7,10 +7,10 @@ var conn = db_config.init();
 var sql;
 
 // 칵테일 이름 기준으로 나열된 칵테일 리스트 중 일부
-router.get('/list', function(req, res, next) {
+router.get('/ls', function(req, res, next) {
     let{start, end} = req.body;
 
-    sql = "select * from cocktail order by cocktail_name limit "+Math.abs(end-start);
+    sql = "select * from cocktail order by cocktail_name limit "+start+", "+end;
     conn.query(sql, function(err, rows, fields) {
         if (err) {
             console.log('body is not excuted. select fail...\n' + err);
@@ -25,7 +25,7 @@ router.get('/list', function(req, res, next) {
 });
 
 // 제시한 기준에 적합한 칵테일 리스트를 칵테일 작성자 기준으로 나열한 목록 중 일부
-router.get('/list/standard', function(req, res, next) {
+router.get('/ls/std', function(req, res, next) {
     let{show_std, show_std_content, start, end} = req.body;
 
     sql = "select * from cocktail where "+show_std+"=\""+show_std_content+"\" order by cocktail_writer limit "+start+", "+end;
@@ -42,8 +42,6 @@ router.get('/list/standard', function(req, res, next) {
     });
 });
 
-// 칵테일 추가(이름이 이미 존재할 경우 추가하지 않고 에러를 반환)
-// 중복 검사
 router.post('/add', function(req, res, next) {
     let{cocktail_name, cocktail_writer, cocktail_image, cocktail_explanation, cocktail_glass, cocktail_base, cocktail_source} = req.body;
     
@@ -64,8 +62,8 @@ router.post('/add', function(req, res, next) {
 
 
 // 칵테일 수정(칵테일 UUID을 기준으로 해당하는 객체 수정)
-router.put('/modify', function(req, res, next) {
-    let{bef_cocktail_uuid, aft_cocktail_name, aft_cocktail_writer, aft_cocktail_image, aft_cocktail_explanation, aft_cocktail_glass, aft_cocktail_base, aft_cocktail_source} = req.body;
+router.put('/mod', function(req, res, next) {
+    let{cocktail_uuid, aft_cocktail_name, aft_cocktail_writer, aft_cocktail_image, aft_cocktail_explanation, aft_cocktail_glass, aft_cocktail_base, aft_cocktail_source} = req.body;
     
     sql = "update cocktail "
         +"set cocktail_name=\""+aft_cocktail_name+"\", "
@@ -75,7 +73,7 @@ router.put('/modify', function(req, res, next) {
             +" cocktail_glass=\""+aft_cocktail_glass+"\", "
             +" cocktail_base=\""+aft_cocktail_base+"\", "
             +" cocktail_source=\""+aft_cocktail_source+"\" "
-        +"where cocktail_uuid=\""+bef_cocktail_uuid+"\"";
+        +"where cocktail_uuid=\""+cocktail_uuid+"\"";
         
     conn.query(sql, function(err, rows, fields) {
         if (err) {

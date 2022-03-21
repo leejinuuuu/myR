@@ -7,7 +7,7 @@ var conn = db_config.init();
 var sql;
 
 // 재료 이름을 기준으로 나열된 재료 리스트 중 일부
-router.get('/list', function(req, res, next) {
+router.get('/ls', function(req, res, next) {
     let{start, end} = req.body;
 
     sql = "select * from ingredient order by ingredient_name limit "+start+", "+end;
