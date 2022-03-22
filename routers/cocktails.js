@@ -5,6 +5,9 @@ const multer = require('multer');
 const path = require('path');
 var fs = require('fs');
 
+var db_config = require(__dirname + '/config/database.js');
+var conn = db_config.init();
+
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
         cb(null, basePath);
@@ -114,12 +117,7 @@ router.get('/:cocktail_uuid', function(req, res, next) {
 
     var result = {};
 
-    sql = 
-        "select cocktail.*, settingCocktailWithIngredient.* "
-        +"from cocktail "
-        +"inner join settingCocktailWithIngredient "
-        +"on cocktail.cocktail_uuid=settingCocktailWithIngredient.cocktail_uuid "
-        +"and cocktail.cocktail_uuid=\""+params.cocktail_uuid+"\"";
+    sql = "select * from cocktail where cocktail_uuid=\""+params.cocktail_uuid+"\"";
 
     conn.query(sql, function(err, rows, fields) {
         if (err) {
@@ -129,6 +127,7 @@ router.get('/:cocktail_uuid', function(req, res, next) {
         }
         else {
             if(rows.length > 0) {
+
                 result["cocktail_uuid"]=(rows[0].cocktail_uuid);
                 result["cocktail_name"]=(rows[0].cocktail_name);
                 result["cocktail_writer"]=(rows[0].cocktail_writer);
@@ -140,16 +139,35 @@ router.get('/:cocktail_uuid', function(req, res, next) {
                 result["setting"]=[];
                 result["comment"]=[];
     
-                for(var i=0; i<rows.length; i++) {
-                    var setting_data = {
-                        setting_data_uuid:rows[i].settingCocktailWithIngredient_uuid,
-                        ingredient_name:rows[i].ingredient_name,
-                        vol:rows[i].vol,
-                        tool:rows[i].tool
-                    };
-                    result["setting"].push(setting_data); 
-                }
-                
+                sql = 
+                    "select cocktail.*, settingCocktailWithIngredient.* "
+                    +"from cocktail "
+                    +"inner join settingCocktailWithIngredient "
+                    +"on cocktail.cocktail_uuid=settingCocktailWithIngredient.cocktail_uuid "
+                    +"and cocktail.cocktail_uuid=\""+params.cocktail_uuid+"\"";
+
+                conn.query(sql, function(err, rows, fields) {
+                        if (err) {
+                            console.log('param is not excuted. select fail...\n' + err);
+                            
+                            res.send("fail")
+                        }
+                        else {
+                            for(var i=0; i<rows.length; i++) {
+                                var setting_data = {
+                                    setting_data_uuid:rows[i].settingCocktailWithIngredient_uuid,
+                                    cocktail_uuid:rows[i].cocktail_uuid,
+                                    cocktail_name:rows[i].cocktail_name,
+                                    ingredient_uuid:rows[i].ingredient_uuid,
+                                    ingredient_name:rows[i].ingredient_name,
+                                    vol:rows[i].vol,
+                                    tool:rows[i].tool
+                                };
+                                result["setting"].push(setting_data); 
+                            }
+                        } 
+                    });
+
                 sql = "select cocktail.*, "
                 +"commentCocktailWithUser.* "
                 +"from cocktail "
@@ -171,11 +189,11 @@ router.get('/:cocktail_uuid', function(req, res, next) {
                                 comment:rows[i].comment,
                                 time:rows[i].time
                             };
-                            result["comment"].push(comment_data); 
+                            result["comment"].push(comment_data);
                         }
-                        res.send(result);
                     } 
                 });
+                res.send(result);
             }
             else res.send("fail")
         } 
@@ -197,7 +215,6 @@ router.delete('/:cocktail_uuid', function(req, res, next) {
             res.send("fail")
         }
         else {
-
             if(rows.length > 0) {
                 sql = "delete from cocktail where cocktail_uuid=\""+params.cocktail_uuid+"\"";
                 conn.query(sql, function(err, rows, fields) {
@@ -206,7 +223,17 @@ router.delete('/:cocktail_uuid', function(req, res, next) {
                         
                         res.send("fail")
                     }
-                    else res.send("success")
+                    else {
+                        fs.unlink(basePath + rows.cocktail_name, err => {
+                            if(err != null) {
+                                console.log("file delete err : "+err);
+                                res.send("fail");
+                            } else 
+                                res.send("success");
+                        })
+
+                        res.send("success")
+                    }
                 });
             } else {
                 res.send("fail")

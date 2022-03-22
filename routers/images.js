@@ -42,12 +42,23 @@ router.post(['/uploads'], upload.any(), (req, res) => {
 router.get('/:name', function(req, res, next) {
     var params = req.params;
     if(params.name != null) {
-        fs.readFile(__dirname + '\\res\\' + params.name, function(err, data) {
+        fs.readFile(basePath + params.name, function(err, data) {
             res.writeHead(200);
             res.write(data);
             res.end();
         });
     }
 })
+
+router.delete("/:name", function(req, res, next) {
+    var params = req.params;
+    fs.unlink(basePath + params.name, err => {
+        if(err != null) {
+            console.log("file delete err : "+err);
+            res.send("fail");
+        } else 
+            res.send("success");
+    })
+});
 
 module.exports = router;

@@ -104,7 +104,17 @@ router.delete('/:ingredient_uuid', function(req, res, next) {
             
             res.send("fail")
         }   
-        else res.json("success");
+        else {
+            fs.unlink(basePath + rows.cocktail_name, err => {
+                if(err != null) {
+                    console.log("file delete err : "+err);
+                    res.send("fail");
+                } else 
+                    res.send("success");
+            })
+            
+            res.json("success");
+        } 
     });
 });
 

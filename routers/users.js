@@ -101,7 +101,8 @@ router.put('/mod', function(req, res, next) {
 router.get('/:user_id', function(req, res, next) {
     var params = req.params;
 
-    sql = "select user.*, downloadUserWithCocktail.cocktail_name from user inner join downloadUserWithCocktail on user.user_id=downloadUserWithCocktail.user_id and user.user_id=\""+params.user_id+"\"";
+    sql = "select * from user where user_id=\""+params.user_id+"\"";
+
     conn.query(sql, function(err, rows, fields) {
         if (err) {
             console.log('params is not excuted. select fail...\n' + err);
@@ -116,9 +117,24 @@ router.get('/:user_id', function(req, res, next) {
                 result["user_nickname"]=(rows[0].user_nickname);
                 result["user_email"]=(rows[0].user_email);
                 result["cocktail_name"]=[];
-    
-                for(var i=0; i<rows.length; i++)
-                    result["cocktail_name"].push(rows[i].cocktail_name);  
+
+                sql = "select user.*, downloadUserWithCocktail.cocktail_name from user inner join downloadUserWithCocktail on user.user_id=downloadUserWithCocktail.user_id and user.user_id=\""+params.user_id+"\"";
+                
+                conn.query(sql, function(err, rows, fields) {
+                    if (err) {
+                        console.log('params is not excuted. select fail...\n' + err);
+            
+                        res.send("fail");
+                    }
+                    else {
+                        if(rows.length > 0) {
+                            for(var i=0; i<rows.length; i++)
+                                result["cocktail_name"].push(rows[i].cocktail_name);  
+
+                        }
+                        else res.send("fail");
+                    } 
+                }); 
                 
                 res.send(result);
             }
