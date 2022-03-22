@@ -7,6 +7,24 @@ var conn = db_config.init();
 var sql;
 
 
+// 사용자 아이디값 중복 확인
+router.get('/check', function(req, res, next) {
+    let{id} = req.body;
+
+    sql = "select * from user where user_id=\""+id+"\"";
+    conn.query(sql, function(err, rows, fields) {
+        if (err) {
+            console.log('body is not excuted. select fail...\n' + err);
+
+            res.send("fail");
+        }
+        else {
+            console.log(rows);
+            if(rows.length > 0)  res.send("impossible");
+            else res.send("possible");
+        }
+    });
+});
 
 // 로그인
 router.post('/login', function(req, res, next) {

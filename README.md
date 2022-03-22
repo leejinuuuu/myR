@@ -5,7 +5,8 @@
 ### todo
 + save uploaded files outside(v)
 + user id check api
-+ form data(image, string) upload api
++ form data(image, string) upload api(v)
++ delete image file
 
 ### ...
 + uuid(primary key) + is it possible to duplicate cocktail/ingredient names?(avaliable now)
